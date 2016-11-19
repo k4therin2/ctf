@@ -6,7 +6,7 @@ from base64 import b64encode
 
 
 def sweet_hash(string):
-    x = 69
+    x = 42
     byte = []
 
     for char in string:
