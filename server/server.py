@@ -1,6 +1,7 @@
 from flask import Flask
 import base64
 import hashlib
+import os
 import shelve
 
 
@@ -46,6 +47,20 @@ def handle_flag_submit(username, flag=None):
     return response
 
 
+def make_hint_links():
+    pages = filter(lambda x: len(x.split('.')) == 2, os.listdir('hints'))
+    pages = [(int(x.split('.')[0]), 'hints/' + x) for x in pages]
+    pages.sort(key=lambda x: x[1])
+    pages = ['<a href="' + x[1] + '">' + str(x[0]) + '</a>' for x in pages]
+
+    return '<br><br><br><strong>Hints</strong><br>' + ' '.join(pages)
+
+
+def serve_hint(page):
+    with open('hints/' + page) as f:
+        return f.read()
+
+
 def make_leaderboards():
     board = list(map(lambda x: (x[0], len(x[1])), scores_dict.items()))
     board.sort(key=lambda x: -x[1])
@@ -55,6 +70,9 @@ def make_leaderboards():
     last_score = 100
 
     leaderboards = '<br><br><br><strong>Leaderboards</strong><br>'
+
+    if len(board) == 0:
+        return leaderboards + 'Nobody!'
 
     for user in board:
         if user[1] != last_score:
@@ -74,10 +92,15 @@ if __name__ == '__main__':
 
     app = Flask('ctf_leaderboards')
 
-    app.route('/')(lambda: index + make_leaderboards())
+    app.route('/')(lambda: index + make_hint_links() + make_leaderboards())
 
-    app.route('/<string:username>')(handle_flag_submit)
-    app.route('/<string:username>/')(handle_flag_submit)
-    app.route('/<string:username>/<string:flag>')(handle_flag_submit)
+    app.route('/hints/<string:page>')(serve_hint)
+
+    app.route('/submit/<string:username>')(handle_flag_submit)
+    app.route('/submit/<string:username>/')(handle_flag_submit)
+    app.route('/submit/<string:username>/<string:flag>')(handle_flag_submit)
+
+    app.errorhandler(404)(lambda x: 'not a page :(')
+    app.errorhandler(500)(lambda x: 'not a page :(')
 
     app.run()
