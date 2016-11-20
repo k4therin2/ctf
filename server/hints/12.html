@@ -1,0 +1,30 @@
+<style>
+pre {
+    background: lavender;
+    display: inline-block;
+    padding: 3px;
+    margin: 4px 0;
+}
+</style>
+<strong>12</strong><br><br>
+
+Liberatore has encrypted his secret using a hash function! Luckily, he chose very weak hash function. Given the hashed flag, reverse-engineer the function to find the original value!<br><br>
+
+<strong>Hash function</strong><br>
+<pre>#!/usr/bin/env python3
+from functools import reduce
+from base64 import b64encode
+
+
+def sweet_hash(string):
+    x = 42
+    byte = []
+
+    for char in string:
+        byte.append(x ^ ord(char))
+        x ^= ord(char)
+
+    return b64encode(bytes(byte))</pre><br><br>
+
+<strong>Hashed flag</strong><br>
+<pre>b'TCBBJl06WylQfRRzHXwIYRRnSj5bOlg3UypX'</pre>
