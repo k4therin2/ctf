@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 from flask import Flask
 import base64
 import hashlib
@@ -31,8 +33,6 @@ def handle_flag_submit(username, flag=None):
     if flag:
         flag = bytes(flag.upper(), 'ascii')
         for actual_flag in flag_map:
-            print(flag)
-            print(get_salted_hash(username, actual_flag))
             if flag == get_salted_hash(username, actual_flag):
                 completed.add(flag_map[actual_flag])
                 scores_dict[username] = completed
