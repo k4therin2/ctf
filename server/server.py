@@ -103,4 +103,4 @@ if __name__ == '__main__':
     app.errorhandler(404)(lambda x: 'not a page :(')
     app.errorhandler(500)(lambda x: 'not a page :(')
 
-    app.run()
+    app.run(host='0.0.0.0')
