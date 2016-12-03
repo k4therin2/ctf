@@ -1,13 +1,17 @@
 #!/usr/bin/env python3
 
-from flask import Flask
+from flask import Flask, render_template, g
 import base64
 import hashlib
 import os
 import shelve
 
 
+app = Flask(__name__)
+
+# little hack to this working on Flask development server
 scores_dict = None
+scores_dict = scores_dict or shelve.open('scores')
 
 
 # Add flags here mapping to their number in our list. For sure a better way
@@ -27,6 +31,9 @@ def get_salted_hash(username, actual_flag):
     return base64.b16encode(sha.digest())
 
 
+@app.route('/submit/<string:username>')
+@app.route('/submit/<string:username>/')
+@app.route('/submit/<string:username>/<string:flag>')
 def handle_flag_submit(username, flag=None):
     completed = scores_dict[username] if username in scores_dict else set()
 
@@ -86,23 +93,23 @@ def make_leaderboards():
     return leaderboards
 
 
+@app.route('/')
+def index():
+    hints = flag_map.values()
+    board = sorted((n, len(fs)) for n, fs in scores_dict.items())
+    return render_template('index.html', hints=hints, board=board)
+
+
+@app.route('/hints/<int:hint>')
+def hints(hint):
+    return render_template('%d.html' % hint)
+
+
+@app.errorhandler(404)
+@app.errorhandler(500)
+def error(err):
+    return 'not a page :('
+
+
 if __name__ == '__main__':
-    scores_dict = shelve.open('scores')
-
-    with open('index.html') as f:
-        index = f.read()
-
-    app = Flask('ctf_leaderboards')
-
-    app.route('/')(lambda: index + make_hint_links() + make_leaderboards())
-
-    app.route('/hints/<string:page>')(serve_hint)
-
-    app.route('/submit/<string:username>')(handle_flag_submit)
-    app.route('/submit/<string:username>/')(handle_flag_submit)
-    app.route('/submit/<string:username>/<string:flag>')(handle_flag_submit)
-
-    app.errorhandler(404)(lambda x: 'not a page :(')
-    app.errorhandler(500)(lambda x: 'not a page :(')
-
-    app.run(host='0.0.0.0')
+    app.run(threaded=False)

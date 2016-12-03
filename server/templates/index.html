@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+{% block title %}HacSoc CTF{% endblock %}
+{% block content %}
+
+<div class="row">
+<div class="col-md-6 col-md-offset-3 text-left">
+    <h2>Hello!</h2>
+
+    <p>
+        Start by looking through the hints below. Each one contains a challenge
+        with a flag at the end of it. When you find a flag, submit it using the
+        form below. If you don't use Javascript, or if you just want that hacker
+        street cred, you can do it manually as follows:
+    </p>
+    <p>
+        To submit a flag, take your username and the flag and produce:<br>
+        <code>hex-encoded-secret = hex(sha1(username + ':' + flag))</code><br>
+        and then visit <code>/submit/username/hex-encoded-secret</code>.
+    </p>
+    <p>
+        If you want to check a user's score, go to <code>/submit/username</code>.
+    </p>
+</div>
+</div>
+
+<div class="row">
+<div class="col-md-8 col-md-offset-2">
+    <div class="panel panel-default">
+        <div class="panel-heading">Submit a Flag!</div>
+        <div class="panel-body">
+                <div class="form-group">
+                    <label for="usernameInput">Username</label>
+                    <input type="text" class="form-control" id="usernameInput">
+                </div>
+                <div class="form-group">
+                    <label for="flagInput">Flag</label>
+                    <input type="text" class="form-control" id="flagInput">
+                </div>
+                <button onclick="submit()" class="btn btn-primary">Submit</button>
+        </div>
+    </div>
+</div>
+</div>
+
+<div class="row">
+<div class="col-md-4 col-md-offset-2">
+    <div class="panel panel-default">
+        <div class="panel-heading">Hints</div>
+        <div class="panel-body">
+            <ul>
+                {% for h in hints %}
+                <li><a href="{{url_for('hints', hint=h)}}">{{h}}</a></li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+</div>
+
+<div class="col-md-4">
+    <div class="panel panel-default">
+        <div class="panel-heading">Leaderboards</div>
+        <div class="panel-body">
+            <ol>
+                {% for b in board %}
+                <li>{{b[0]}} &dash; {{b[1]}} found</li>
+                {% endfor %}
+            </ol>
+        </div>
+    </div>
+</div>
+</div>
+<script>
+ function submit() {
+    var u = $("#usernameInput")
+    var f = $("#flagInput")
+    var hash = sha1(u.val() + ':' + f.val())
+    console.log(hash)
+    var path = '/submit/' + u.val() + '/' + hash
+    console.log(path)
+    window.location.pathname = '/submit/' + u.val() + '/' + hash
+ }
+</script>
+{% endblock %}
