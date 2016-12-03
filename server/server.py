@@ -56,43 +56,6 @@ def handle_flag_submit(username, flag=None):
     )
 
 
-def make_hint_links():
-    pages = filter(lambda x: len(x.split('.')) == 2, os.listdir('hints'))
-    pages = [(int(x.split('.')[0]), 'hints/' + x) for x in pages]
-    pages.sort(key=lambda x: x[1])
-    pages = ['<a href="' + x[1] + '">' + str(x[0]) + '</a>' for x in pages]
-
-    return '<br><br><br><strong>Hints</strong><br>' + ' '.join(pages)
-
-
-def serve_hint(page):
-    with open('hints/' + page) as f:
-        return f.read()
-
-
-def make_leaderboards():
-    board = list(map(lambda x: (x[0], len(x[1])), scores_dict.items()))
-    board.sort(key=lambda x: -x[1])
-
-    i = 1
-    last_place = 0
-    last_score = 100
-
-    leaderboards = '<br><br><br><strong>Leaderboards</strong><br>'
-
-    if len(board) == 0:
-        return leaderboards + 'Nobody!'
-
-    for user in board:
-        if user[1] != last_score:
-            last_place = i
-        leaderboards += '{}. {}<br>'.format(last_place, user[0])
-        i += 1
-        last_score = user[1]
-
-    return leaderboards
-
-
 @app.route('/')
 def index():
     hints = sorted(flag_map.values())
