@@ -49,7 +49,7 @@ def handle_flag_submit(username, flag=None):
 
     return render_template(
         "completed.html",
-        completed=map(str, completed),
+        completed=map(str, completed) if completed else None,
         just_completed=just_completed,
         username=username,
         flag=flag
