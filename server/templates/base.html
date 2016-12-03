@@ -17,6 +17,13 @@
                 HacSoc CTF!
             </a>
         </div>
+        <div class="navbar-right">
+            {% if username %}
+            <a class="navbar-text" href="{{url_for('cas.logout')}}">Log out {{username}}</a>
+            {% else %}
+            <a class="navbar-text" href="{{url_for('cas.login')}}">Log in</a>
+            {% endif %}
+        </div>
     </div>
 </nav>
 <div class='container'>

@@ -1,13 +1,20 @@
 #!/usr/bin/env python3
 
-from flask import Flask, render_template, g
 import base64
 import hashlib
 import os
+import os.path
 import shelve
+
+from flask import Flask, render_template, g
+from flask.ext.cas import CAS, login_required
 
 
 app = Flask(__name__)
+cas = CAS(app, '/cas')
+app.config['CAS_SERVER'] = 'https://login.case.edu'
+app.config['CAS_AFTER_LOGIN'] = 'index'
+app.config['CAS_AFTER_LOGOUT'] = 'index'
 
 # little hack to this working on Flask development server
 scores_dict = None
@@ -31,21 +38,30 @@ def get_salted_hash(username, actual_flag):
     return base64.b16encode(sha.digest())
 
 
-@app.route('/submit/<string:username>')
-@app.route('/submit/<string:username>/')
-@app.route('/submit/<string:username>/<string:flag>')
-def handle_flag_submit(username, flag=None):
+@app.route('/score/<string:username>')
+def score(username):
+    completed = scores_dict[username] if username in scores_dict else set()
+    return render_template(
+        "score.html",
+        completed=map(str, completed),
+        score_for=username,
+        username=cas.username,
+    )
+
+@app.route('/submit/<string:flag>')
+@login_required
+def handle_flag_submit(flag=None):
+    username = cas.username
     completed = scores_dict[username] if username in scores_dict else set()
     just_completed = None
 
-    if flag:
-        flag = bytes(flag.upper(), 'ascii')
-        for actual_flag in flag_map:
-            if flag == get_salted_hash(username, actual_flag):
-                just_completed = flag_map[actual_flag]
-                completed.add(just_completed)
-                scores_dict[username] = completed
-                print('{} completed {}'.format(username, flag_map[actual_flag]))
+    flag = bytes(flag.upper(), 'ascii')
+    for actual_flag in flag_map:
+        if flag == get_salted_hash(username, actual_flag):
+            just_completed = flag_map[actual_flag]
+            completed.add(just_completed)
+            scores_dict[username] = completed
+            print('{} completed {}'.format(username, flag_map[actual_flag]))
 
     return render_template(
         "completed.html",
@@ -58,14 +74,15 @@ def handle_flag_submit(username, flag=None):
 
 @app.route('/')
 def index():
-    hints = sorted(flag_map.values())
+    hints = sorted(flag_map.values(), reverse=True)
     board = sorted((n, len(fs)) for n, fs in scores_dict.items())
-    return render_template('index.html', hints=hints, board=board)
+    return render_template('index.html', hints=hints, board=board,
+                           username=cas.username)
 
 
 @app.route('/hints/<int:hint>')
 def hints(hint):
-    return render_template('%d.html' % hint)
+    return render_template('%d.html' % hint, username=cas.username)
 
 
 @app.errorhandler(404)
@@ -75,4 +92,10 @@ def error(err):
 
 
 if __name__ == '__main__':
+    if not os.path.exists('secret'):
+        print('NOTE: New secret key. All sessions lost.')
+        with open('secret', 'wb') as f:
+            f.write(os.urandom(24))
+    with open('secret', 'rb') as f:
+        app.secret_key = f.read(24)
     app.run(threaded=False)

@@ -28,15 +28,15 @@
     <div class="panel panel-default">
         <div class="panel-heading">Submit a Flag!</div>
         <div class="panel-body">
-                <div class="form-group">
-                    <label for="usernameInput">Username</label>
-                    <input type="text" class="form-control" id="usernameInput">
-                </div>
-                <div class="form-group">
-                    <label for="flagInput">Flag</label>
-                    <input type="text" class="form-control" id="flagInput">
-                </div>
-                <button onclick="submit()" class="btn btn-primary">Submit</button>
+            {% if username %}
+            <div class="form-group">
+                <label for="flagInput">Flag</label>
+                <input type="text" class="form-control" id="flagInput">
+            </div>
+            <button onclick="submit()" class="btn btn-primary">Submit</button>
+            {% else %}
+            <a href="{{url_for('cas.login')}}">You must login before submitting!</a>
+            {% endif %}
         </div>
     </div>
 </div>
@@ -62,7 +62,7 @@
         <div class="panel-body">
             <ol>
                 {% for b in board %}
-                <li><a href="{{url_for('handle_flag_submit', username=b[0])}}">{{b[0]}}</a> &dash; {{b[1]}} found</li>
+                <li><a href="{{url_for('score', username=b[0])}}">{{b[0]}}</a> &dash; {{b[1]}} found</li>
                 {% endfor %}
             </ol>
         </div>
@@ -71,13 +71,10 @@
 </div>
 <script>
  function submit() {
-    var u = $("#usernameInput")
     var f = $("#flagInput")
-    var hash = sha1(u.val() + ':' + f.val())
-    console.log(hash)
-    var path = '/submit/' + u.val() + '/' + hash
-    console.log(path)
-    window.location.pathname = '/submit/' + u.val() + '/' + hash
+    var hash = sha1("{{username}}" + ':' + f.val())
+    var path = '/submit/' + hash
+    window.location.pathname = path
  }
 </script>
 {% endblock %}
