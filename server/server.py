@@ -36,24 +36,24 @@ def get_salted_hash(username, actual_flag):
 @app.route('/submit/<string:username>/<string:flag>')
 def handle_flag_submit(username, flag=None):
     completed = scores_dict[username] if username in scores_dict else set()
-
-    response = 'hi {}<br><br>'.format(username)
+    just_completed = None
 
     if flag:
         flag = bytes(flag.upper(), 'ascii')
         for actual_flag in flag_map:
             if flag == get_salted_hash(username, actual_flag):
-                completed.add(flag_map[actual_flag])
+                just_completed = flag_map[actual_flag]
+                completed.add(just_completed)
                 scores_dict[username] = completed
-
                 print('{} completed {}'.format(username, flag_map[actual_flag]))
 
-    if len(completed) > 0:
-        response += 'completed: {}'.format(', '.join(map(str, completed)))
-    else:
-        response += 'you haven\'t found anything yet :('
-
-    return response
+    return render_template(
+        "completed.html",
+        completed=map(str, completed),
+        just_completed=just_completed,
+        username=username,
+        flag=flag
+    )
 
 
 def make_hint_links():
