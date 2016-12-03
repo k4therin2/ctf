@@ -1,16 +1,14 @@
-<style>
-pre {
-    background: lavender;
-    display: inline-block;
-    padding: 3px;
-    margin: 4px 0;
-}
-</style>
-<strong>12</strong><br><br>
+{% extends "hint.html" %}
+{% block hint %}
+<h2>12</h2>
 
-Liberatore has encrypted his secret using a hash function! Luckily, he chose very weak hash function. Given the hashed flag, reverse-engineer the function to find the original value!<br><br>
+<p>
+    Liberatore has encrypted his secret using a hash function! Luckily, he chose
+    very weak hash function. Given the hashed flag, reverse-engineer the
+    function to find the original value!
+</p>
 
-<strong>Hash function</strong><br>
+<h4>Hash function</h4>
 <pre>#!/usr/bin/env python3
 from functools import reduce
 from base64 import b64encode
@@ -24,7 +22,8 @@ def sweet_hash(string):
         byte.append(x ^ ord(char))
         x ^= ord(char)
 
-    return b64encode(bytes(byte))</pre><br><br>
+    return b64encode(bytes(byte))</pre>
 
-<strong>Hashed flag</strong><br>
+<h4>Hashed flag</h4>
 <pre>b'TCBBJl06WylQfRRzHXwIYRRnSj5bOlg3UypX'</pre>
+{% endblock %}

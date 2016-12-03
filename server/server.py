@@ -95,7 +95,7 @@ def make_leaderboards():
 
 @app.route('/')
 def index():
-    hints = flag_map.values()
+    hints = sorted(flag_map.values())
     board = sorted((n, len(fs)) for n, fs in scores_dict.items())
     return render_template('index.html', hints=hints, board=board)
 
