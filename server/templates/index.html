@@ -62,7 +62,7 @@
         <div class="panel-body">
             <ol>
                 {% for b in board %}
-                <li>{{b[0]}} &dash; {{b[1]}} found</li>
+                <li><a href="{{url_for('handle_flag_submit', username=b[0])}}">{{b[0]}}</a> &dash; {{b[1]}} found</li>
                 {% endfor %}
             </ol>
         </div>
