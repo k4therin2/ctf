@@ -1,0 +1,41 @@
+{% extends "hint.html" %}
+{% block hint %}
+<h2>15</h2>
+
+<p>
+    Misha sent you a strange download link to a program that says "don't run
+    me". Could he be trying to use reverse psychology on you? Who knows! But
+    there is a flag somewhere in this program, if you can snoop it out.
+</p>
+
+<ul>
+    <li><a href="https://brennan.io/DontRunMe">Linux</a></li>
+    <li><a href="https://brennan.io/DontRunMe.mac">macOS</a></li>
+    <li><a href="https://brennan.io/DontRunMe.exe">Windows</a></li>
+</ul>
+
+<button class="btn btn-primary" id="hint1button" onClick="toggle('#hint1')">Halp</button><br><br>
+
+<div id="hint1" style="display: none">
+    <h4>Halp!</h4>
+    <p>
+        You might want to use something like <a href="https://www.wireshark.org">Wireshark</a> to
+        find this flag.
+    </p>
+
+    <p>
+        Also, on mac and linux, you may want to use
+        <pre>$ chmod u+x DontRunMe</pre>
+        to make theprogram runnable.
+    </p>
+    <button class="btn btn-primary" id="hint2button" onClick="toggle('#hint2')">Moar Halp</button><br><br>
+</div>
+
+<div id="hint2" style="display: none">
+    <h4>Moar Halp!</h4>
+    <p>
+        Have you heard of <a href="https://en.wikipedia.org/wiki/User_Datagram_Protocol">UDP</a>?
+        You might want to check that out, on port 58008!
+    </p>
+</div>
+{% endblock %}
