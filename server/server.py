@@ -18,6 +18,7 @@ flag_map = {
     'pan galactic gargle blaster': 21,
     'FLAG{c_is_the_best_and_you_should_all_learn_it}': 15,
     'flag{:poopemoji:}': 14,
+    'flaggetmeout': 39,
 }
 
 
