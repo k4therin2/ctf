@@ -3,9 +3,9 @@
 <div class="col-md-8 col-md-offset-2">
     <h2>Hi {{username}}</h2>
     <br>
-    {% if flag and just_completed %}
+    {% if just_completed %}
     <p>Congrats, you just completed flag {{just_completed}}!</p>
-    {% elif flag and not just_completed%}
+    {% else %}
     <p>Sorry, <code>{{flag}}</code> is not a valid flag. Keep trying!</p>
     {% endif %}
     {% if completed %}
