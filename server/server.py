@@ -16,6 +16,8 @@ scores_dict = None
 flag_map = {
     'flag{gary-ignatius-teabody}': 12,
     'pan galactic gargle blaster': 21,
+    'FLAG{c_is_the_best_and_you_should_all_learn_it}': 15,
+    'flag{:poopemoji:}': 14,
 }
 
 
