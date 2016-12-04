@@ -19,7 +19,7 @@ app.config['CAS_AFTER_LOGIN'] = 'index'
 app.config['SHELVE_FILENAME'] = 'scores'
 cas = CAS(app, '/cas')
 init_app(app)
-EMAIL_ENABLED = True
+EMAIL_ENABLED = False
 
 
 # Add flags here mapping to their number in our list. For sure a better way
@@ -145,4 +145,4 @@ with open('secret', 'rb') as f:
 
 
 if __name__ == '__main__':
-    app.run(threaded=False, host='0.0.0.0', port=80)
+    app.run()
