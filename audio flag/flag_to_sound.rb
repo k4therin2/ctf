@@ -31,7 +31,7 @@ puts flag_binary_string
 
 # specify a duration to repeat each binary value
 # so the .wav is long enough for us to hear....
-duration = 1
+duration = 100
 
 buffer = Buffer.new(flag_samples, Format.new(:mono, :float, 44100))
 Writer.new("flag.wav", Format.new(:mono, :pcm_16, 44100)) do |writer|
