@@ -134,11 +134,13 @@ def error(err):
     return 'not a page :('
 
 
-if __name__ == '__main__':
-    if not os.path.exists('secret'):
-        print('NOTE: New secret key. All sessions lost.')
-        with open('secret', 'wb') as f:
-            f.write(os.urandom(24))
+if not os.path.exists('secret'):
+    print('NOTE: New secret key. All sessions lost.')
+    with open('secret', 'wb') as f:
+        f.write(os.urandom(24))
     with open('secret', 'rb') as f:
         app.secret_key = f.read(24)
+
+
+if __name__ == '__main__':
     app.run(threaded=False, host='0.0.0.0', port=80)
