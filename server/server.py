@@ -104,8 +104,8 @@ def handle_flag_submit(flag=None):
 def index():
     scores_dict = get_shelve('r')
     hints = [x for x in sorted(flag_map.values()) if x > 0]
-    board = sorted(((n, ', '.join(map(str, fs)), calc_score(n)) for n, fs in scores_dict.items()),
-                   key=lambda x: x[2], reverse=True)
+    board = sorted(((n, ', '.join(map(str, fs)), "%.2f" % calc_score(n)) for n, fs in scores_dict.items()),
+                   key=lambda x: float(x[2]), reverse=True)
     return render_template('index.html', hints=hints, board=board,
                            username=cas.username)
 
