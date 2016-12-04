@@ -1,0 +1,4 @@
+__pycache__
+server/scores
+server/secret
+server/venv
