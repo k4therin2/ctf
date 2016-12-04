@@ -40,7 +40,7 @@
         <div class="panel-body">
             <ul>
                 {% for h in hints %}
-                <li><a href="{{url_for('hints', hint=h)}}">{{h}}</a></li>
+                <li><a href="{{url_for('hints', hint=h)}}">Flag {{h}}</a></li>
                 {% endfor %}
             </ul>
         </div>

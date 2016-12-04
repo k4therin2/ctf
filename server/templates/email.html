@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="col-md-8 col-md-offset-2">
+    {% if success %}
+    <h2>You've Got Mail!</h2>
+    <p>{{msg}}</p>
+    {% else %}
+    <h2>Error</h2>
+    <p>Ask an organizer to manually send you the email hint.</p>
+    {% endif %}
+</div>
+{% endblock %}
