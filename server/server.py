@@ -9,6 +9,8 @@ import shelve
 from flask import Flask, render_template, g
 from flask_cas import CAS, login_required
 
+from linkedlist import LINKED_LIST, LL_END
+
 
 app = Flask(__name__)
 cas = CAS(app, '/cas')
@@ -27,6 +29,7 @@ scores_dict = scores_dict or shelve.open('scores')
 flag_map = {
     'flag{I_lied_this_is_a_flag}': 1,
     'flag{touch_and_go}': 4,
+    'flag{never_break_the_chain}': 6,
     'flag{gary-ignatius-teabody}': 12,
     'flag{mailto:has_somebody_pooped@case.edu}': 13,
     'flag{:poopemoji:}': 14,
@@ -90,6 +93,19 @@ def index():
 @app.route('/hints/<int:hint>')
 def hints(hint):
     return render_template('%d.html' % hint, username=cas.username)
+
+
+@app.route('/linkedlist/<int:addr>')
+def linkedlist(addr):
+    if addr == LL_END:
+        return 'flag{never_break_the_chain}'
+    if addr not in LINKED_LIST:
+        return "That's not part of the list!", 404
+    next_addrs = LINKED_LIST[addr]
+    if len(next_addrs) == 2: # fork
+        return 'next: %d\nbut the real one is: %d' % next_addrs
+    else:
+        return 'next: %d' % next_addrs[0]
 
 
 @app.errorhandler(404)
