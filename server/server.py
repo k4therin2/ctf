@@ -40,7 +40,8 @@ flag_map = {
     'flag{pan galactic gargle blaster}': 21,
     'Flag{My_Homo_is_erectus}': 22,
     'flaggetmeout': 39,
-    'flag{R2_deet_doot}' : 18,
+    'flag{R2_deet_doot}': 18,
+    'flag{dat_tswizzle_reference_tho}': -1,
 }
 
 
@@ -89,7 +90,7 @@ def handle_flag_submit(flag=None):
 @app.route('/')
 def index():
     scores_dict = get_shelve('r')
-    hints = sorted(flag_map.values())
+    hints = [x for x in sorted(flag_map.values()) if x > 0]
     board = sorted(((n, ', '.join(map(str, fs))) for n, fs in scores_dict.items()),
                    key=lambda x: len(x[1].split(',')), reverse=True)
     return render_template('index.html', hints=hints, board=board,
@@ -98,6 +99,8 @@ def index():
 
 @app.route('/hints/<int:hint>')
 def hints(hint):
+    if hint <= 0:
+        return 'this is probably not a flag', 404
     scores_dict = get_shelve('r')
     solvedit = [u for u, l in scores_dict.items() if hint in l]
     return render_template('%d.html' % hint, username=cas.username,
