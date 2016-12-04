@@ -7,7 +7,7 @@ import os.path
 import shelve
 
 from flask import Flask, render_template, g
-from flask.ext.cas import CAS, login_required
+from flask_cas import CAS, login_required
 
 
 app = Flask(__name__)
