@@ -75,8 +75,9 @@ def handle_flag_submit(flag=None):
 
 @app.route('/')
 def index():
-    hints = sorted(flag_map.values(), reverse=True)
-    board = sorted((n, len(fs)) for n, fs in scores_dict.items())
+    hints = sorted(flag_map.values())
+    board = sorted(((n, len(fs)) for n, fs in scores_dict.items()),
+                   reverse=True)
     return render_template('index.html', hints=hints, board=board,
                            username=cas.username)
 
