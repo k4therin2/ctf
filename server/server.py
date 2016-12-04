@@ -103,7 +103,7 @@ def linkedlist(addr):
         return "That's not part of the list!", 404
     next_addrs = LINKED_LIST[addr]
     if len(next_addrs) == 2: # fork
-        return 'next: %d\nbut the real one is: %d' % next_addrs
+        return 'next: %d\nbut the real one is: %d' % tuple(next_addrs)
     else:
         return 'next: %d' % next_addrs[0]
 
