@@ -140,4 +140,4 @@ if __name__ == '__main__':
             f.write(os.urandom(24))
     with open('secret', 'rb') as f:
         app.secret_key = f.read(24)
-    app.run(threaded=False, port=80)
+    app.run(threaded=False, host='0.0.0.0', port=80)
