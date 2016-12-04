@@ -46,8 +46,7 @@ flag_map = {
 }
 
 
-def calc_score(username):
-    scores_dict = get_shelve('r')
+def calc_score(username, scores_dict):
     completed = scores_dict[username] if username in scores_dict else set()
     num_users = len([u for u, l in scores_dict.items() if len(l) > 0])
     score = 0
@@ -67,7 +66,7 @@ def get_salted_hash(username, actual_flag):
 def score(username):
     scores_dict = get_shelve('r')
     completed = scores_dict[username] if username in scores_dict else set()
-    score = calc_score(username)
+    score = calc_score(username, scores_dict)
     return render_template(
         "score.html",
         completed=map(str, completed),
@@ -105,7 +104,7 @@ def handle_flag_submit(flag=None):
 def index():
     scores_dict = get_shelve('r')
     hints = [x for x in sorted(flag_map.values()) if x > 0]
-    board = sorted(((n, ', '.join(map(str, fs)), "%.2f" % calc_score(n)) for n, fs in scores_dict.items()),
+    board = sorted(((n, ', '.join(map(str, fs)), "%.2f" % calc_score(n, scores_dict)) for n, fs in scores_dict.items()),
                    key=lambda x: float(x[2]), reverse=True)
     return render_template('index.html', hints=hints, board=board,
                            username=cas.username)
