@@ -39,6 +39,7 @@ flag_map = {
     'flag{pan galactic gargle blaster}': 21,
     'Flag{My_Homo_is_erectus}': 22,
     'flaggetmeout': 39,
+    'flag{R2_deet_doot}' : 18,
 }
 
 

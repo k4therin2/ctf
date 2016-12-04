@@ -1,4 +1,26 @@
-require 'wavefile'
+{% extends "hint.html" %}
+{% block hint %}
+<h2>12</h2>
+
+<p>
+    The evil CTF cyborg overlords have taken control of Glennan. They've replaced the RFID scanners with password locks which change every 5 minutes.
+    They've been communicating the passwords to eachother via beep noises.
+</p>
+<p>
+    The rebel forces have managed to take one of them down- you've hacked into their system and found the program they use to encode messages into the beeps.
+</p>
+<p>
+    To escape Glennan and help save the school, crack the current password!
+</p>
+
+<h4> Audio: </h4>
+
+<a href="/static/flag.wav" > Flag.wav </a>
+
+
+<h4> Message Encoder (message_to_sound.rb): </h4>
+
+<pre>require 'wavefile'
 include WaveFile
 
 #Ask CTF Overlords for flag value
@@ -31,7 +53,7 @@ puts flag_binary_string
 
 # specify a duration to repeat each binary value
 # so the .wav is long enough for us to hear....
-duration = 100
+duration = 1
 
 buffer = Buffer.new(flag_samples, Format.new(:mono, :float, 44100))
 Writer.new("flag.wav", Format.new(:mono, :pcm_16, 44100)) do |writer|
@@ -41,4 +63,6 @@ Writer.new("flag.wav", Format.new(:mono, :pcm_16, 44100)) do |writer|
   duration.times { output = writer.write(buffer) }
  end
 
-# * or read about it: http://wavefilegem.com/getting_started.html
+# * or read about it: http://wavefilegem.com/getting_started.html</pre>
+
+{% endblock %}
