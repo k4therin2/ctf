@@ -53,7 +53,7 @@ def calc_score():
     score = 0
     for hint in completed:
         num_comp = len([u for u, l in scores_dict.items() if hint in l])
-        score += num_comp / num_users
+        score +=  num_users / num_comp
     return score
 
 
