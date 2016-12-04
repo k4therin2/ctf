@@ -41,3 +41,9 @@ fn main() {
     }
 }
 ```
+
+The solution is:
+
+```
+flag{All men are created equal}
+```
