@@ -25,9 +25,10 @@ scores_dict = scores_dict or shelve.open('scores')
 # to go about this, but this is quick and dirty. Also should we standardize
 # flag format lol?
 flag_map = {
-    'flag{I_lied_this_is_a_flag}': 1,  # no hint for this, it was emailed
+    'flag{I_lied_this_is_a_flag}': 1,
     'flag{touch_and_go}': 4,
     'flag{gary-ignatius-teabody}': 12,
+    'flag{mailto:has_somebody_pooped@case.edu}': 13,
     'pan galactic gargle blaster': 21,
     'FLAG{c_is_the_best_and_you_should_all_learn_it}': 15,
     'flag{:poopemoji:}': 14,
