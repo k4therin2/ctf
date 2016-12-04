@@ -2,5 +2,14 @@
 {% block content %}
 <div class="col-md-8 col-md-offset-2">
     {% block hint %}{% endblock %}
+
+    {% if solvedit %}
+    <h4>Who has solved it?</h4>
+    <ul>
+        {% for username in solvedit %}
+        <li><a href="{{url_for('score', username=username)}}">{{username}}</a></li>
+        {% endfor %}
+    </ul>
+    {% endif %}
 </div>
 {% endblock %}
