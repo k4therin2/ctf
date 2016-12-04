@@ -42,6 +42,7 @@ flag_map = {
     'flaggetmeout': 39,
     'flag{R2_deet_doot}': 18,
     'flag{dat_tswizzle_reference_tho}': -1,
+    'flag{camelCaseFlagForTheWin}': 23,
 }
 
 
