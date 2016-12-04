@@ -1,2 +1,3 @@
 flask
 -e git+git://github.com/cameronbwhite/Flask-CAS.git@v1.0.1#egg=Flask-CAS
+flask-shelve

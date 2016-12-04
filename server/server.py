@@ -4,24 +4,22 @@ import base64
 import hashlib
 import os
 import os.path
-import shelve
 
 from flask import Flask, render_template, g
 from flask_cas import CAS, login_required
+from flask_shelve import get_shelve, init_app
 
 from emailhint import send_hint
 from linkedlist import LINKED_LIST, LL_END
 
 
 app = Flask(__name__)
-cas = CAS(app, '/cas')
 app.config['CAS_SERVER'] = 'https://login.case.edu'
 app.config['CAS_AFTER_LOGIN'] = 'index'
+app.config['SHELVE_FILENAME'] = 'scores'
+cas = CAS(app, '/cas')
+init_app(app)
 EMAIL_ENABLED = True
-
-# little hack to this working on Flask development server
-scores_dict = None
-scores_dict = scores_dict or shelve.open('scores')
 
 
 # Add flags here mapping to their number in our list. For sure a better way
@@ -52,6 +50,7 @@ def get_salted_hash(username, actual_flag):
 
 @app.route('/score/<string:username>')
 def score(username):
+    scores_dict = get_shelve('r')
     completed = scores_dict[username] if username in scores_dict else set()
     return render_template(
         "score.html",
@@ -64,6 +63,7 @@ def score(username):
 @login_required
 def handle_flag_submit(flag=None):
     username = cas.username
+    scores_dict = get_shelve('w')
     completed = scores_dict[username] if username in scores_dict else set()
     just_completed = None
 
@@ -86,6 +86,7 @@ def handle_flag_submit(flag=None):
 
 @app.route('/')
 def index():
+    scores_dict = get_shelve('r')
     hints = sorted(flag_map.values())
     board = sorted(((n, len(fs)) for n, fs in scores_dict.items()),
                    key=lambda x: x[1], reverse=True)
