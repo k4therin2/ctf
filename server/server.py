@@ -98,7 +98,10 @@ def index():
 
 @app.route('/hints/<int:hint>')
 def hints(hint):
-    return render_template('%d.html' % hint, username=cas.username)
+    scores_dict = get_shelve('r')
+    solvedit = [u for u, l in scores_dict.items() if hint in l]
+    return render_template('%d.html' % hint, username=cas.username,
+                           solvedit=solvedit)
 
 
 @app.route('/linkedlist/<int:addr>')
