@@ -88,7 +88,7 @@ def handle_flag_submit(flag=None):
 def index():
     hints = sorted(flag_map.values())
     board = sorted(((n, len(fs)) for n, fs in scores_dict.items()),
-                   reverse=True)
+                   key=lambda x: x[1], reverse=True)
     return render_template('index.html', hints=hints, board=board,
                            username=cas.username)
 
