@@ -37,7 +37,8 @@ flag_map = {
     'flag{:poopemoji:}': 14,
     'FLAG{c_is_the_best_and_you_should_all_learn_it}': 15,
     'flag{joe_biden}': 19,
-    'pan galactic gargle blaster': 21,
+    'flag{Leeroy Jenkins}': 20,
+    'flag{pan galactic gargle blaster}': 21,
     'Flag{My_Homo_is_erectus}': 22,
     'flaggetmeout': 39,
 }
