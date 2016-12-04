@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="col-md-8 col-md-offset-2">
+    <h2>Hi {{username}}</h2>
+    <br>
+    {% if just_completed %}
+    <p>Congrats, you just completed flag {{just_completed}}!</p>
+    {% else %}
+    <p>Sorry, <code>{{flag}}</code> is not a valid flag. Keep trying!</p>
+    {% endif %}
+    {% if completed %}
+    <p>You have captured {{', '.join( completed)}} so far.</p>
+    {% else %}
+    <p>You have no flags yet. :(</p>
+    {% endif %}
+
+    <br>
+    <a href="/">Take me back.</a>
+</div>
+{% endblock %}

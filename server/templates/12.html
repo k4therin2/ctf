@@ -1,0 +1,29 @@
+{% extends "hint.html" %}
+{% block hint %}
+<h2>12</h2>
+
+<p>
+    Liberatore has encrypted his secret using a hash function! Luckily, he chose
+    very weak hash function. Given the hashed flag, reverse-engineer the
+    function to find the original value!
+</p>
+
+<h4>Hash function</h4>
+<pre>#!/usr/bin/env python3
+from functools import reduce
+from base64 import b64encode
+
+
+def sweet_hash(string):
+    x = 42
+    byte = []
+
+    for char in string:
+        byte.append(x ^ ord(char))
+        x ^= ord(char)
+
+    return b64encode(bytes(byte))</pre>
+
+<h4>Hashed flag</h4>
+<pre>b'TCBBJl06WylQfRRzHXwIYRRnSj5bOlg3UypX'</pre>
+{% endblock %}

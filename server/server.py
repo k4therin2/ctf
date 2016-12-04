@@ -1,13 +1,24 @@
 #!/usr/bin/env python3
 
-from flask import Flask
 import base64
 import hashlib
 import os
+import os.path
 import shelve
 
+from flask import Flask, render_template, g
+from flask.ext.cas import CAS, login_required
 
+
+app = Flask(__name__)
+cas = CAS(app, '/cas')
+app.config['CAS_SERVER'] = 'https://login.case.edu'
+app.config['CAS_AFTER_LOGIN'] = 'index'
+app.config['CAS_AFTER_LOGOUT'] = 'index'
+
+# little hack to this working on Flask development server
 scores_dict = None
+scores_dict = scores_dict or shelve.open('scores')
 
 
 # Add flags here mapping to their number in our list. For sure a better way
@@ -28,82 +39,64 @@ def get_salted_hash(username, actual_flag):
     return base64.b16encode(sha.digest())
 
 
-def handle_flag_submit(username, flag=None):
+@app.route('/score/<string:username>')
+def score(username):
     completed = scores_dict[username] if username in scores_dict else set()
+    return render_template(
+        "score.html",
+        completed=map(str, completed),
+        score_for=username,
+        username=cas.username,
+    )
 
-    response = 'hi {}<br><br>'.format(username)
+@app.route('/submit/<string:flag>')
+@login_required
+def handle_flag_submit(flag=None):
+    username = cas.username
+    completed = scores_dict[username] if username in scores_dict else set()
+    just_completed = None
 
-    if flag:
-        flag = bytes(flag.upper(), 'ascii')
-        for actual_flag in flag_map:
-            if flag == get_salted_hash(username, actual_flag):
-                completed.add(flag_map[actual_flag])
-                scores_dict[username] = completed
+    flag = bytes(flag.upper(), 'ascii')
+    for actual_flag in flag_map:
+        if flag == get_salted_hash(username, actual_flag):
+            just_completed = flag_map[actual_flag]
+            completed.add(just_completed)
+            scores_dict[username] = completed
+            print('{} completed {}'.format(username, flag_map[actual_flag]))
 
-                print('{} completed {}'.format(username, flag_map[actual_flag]))
-
-    if len(completed) > 0:
-        response += 'completed: {}'.format(', '.join(map(str, completed)))
-    else:
-        response += 'you haven\'t found anything yet :('
-
-    return response
-
-
-def make_hint_links():
-    pages = filter(lambda x: len(x.split('.')) == 2, os.listdir('hints'))
-    pages = [(int(x.split('.')[0]), 'hints/' + x) for x in pages]
-    pages.sort(key=lambda x: x[1])
-    pages = ['<a href="' + x[1] + '">' + str(x[0]) + '</a>' for x in pages]
-
-    return '<br><br><br><strong>Hints</strong><br>' + ' '.join(pages)
-
-
-def serve_hint(page):
-    with open('hints/' + page) as f:
-        return f.read()
+    return render_template(
+        "completed.html",
+        completed=map(str, completed) if completed else None,
+        just_completed=just_completed,
+        username=username,
+        flag=flag
+    )
 
 
-def make_leaderboards():
-    board = list(map(lambda x: (x[0], len(x[1])), scores_dict.items()))
-    board.sort(key=lambda x: -x[1])
+@app.route('/')
+def index():
+    hints = sorted(flag_map.values(), reverse=True)
+    board = sorted((n, len(fs)) for n, fs in scores_dict.items())
+    return render_template('index.html', hints=hints, board=board,
+                           username=cas.username)
 
-    i = 1
-    last_place = 0
-    last_score = 100
 
-    leaderboards = '<br><br><br><strong>Leaderboards</strong><br>'
+@app.route('/hints/<int:hint>')
+def hints(hint):
+    return render_template('%d.html' % hint, username=cas.username)
 
-    if len(board) == 0:
-        return leaderboards + 'Nobody!'
 
-    for user in board:
-        if user[1] != last_score:
-            last_place = i
-        leaderboards += '{}. {}<br>'.format(last_place, user[0])
-        i += 1
-        last_score = user[1]
-
-    return leaderboards
+@app.errorhandler(404)
+@app.errorhandler(500)
+def error(err):
+    return 'not a page :('
 
 
 if __name__ == '__main__':
-    scores_dict = shelve.open('scores')
-
-    with open('index.html') as f:
-        index = f.read()
-
-    app = Flask('ctf_leaderboards')
-
-    app.route('/')(lambda: index + make_hint_links() + make_leaderboards())
-
-    app.route('/hints/<string:page>')(serve_hint)
-
-    app.route('/submit/<string:username>')(handle_flag_submit)
-    app.route('/submit/<string:username>/')(handle_flag_submit)
-    app.route('/submit/<string:username>/<string:flag>')(handle_flag_submit)
-
-    app.errorhandler(404)(lambda x: 'not a page :(')
-    app.errorhandler(500)(lambda x: 'not a page :(')
-
-    app.run(host='0.0.0.0')
+    if not os.path.exists('secret'):
+        print('NOTE: New secret key. All sessions lost.')
+        with open('secret', 'wb') as f:
+            f.write(os.urandom(24))
+    with open('secret', 'rb') as f:
+        app.secret_key = f.read(24)
+    app.run(threaded=False)

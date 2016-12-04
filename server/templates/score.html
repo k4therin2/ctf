@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="col-md-8 col-md-offset-2">
+    <h2>Score for {{score_for}}</h2>
+    <br>
+    {% if completed %}
+    <p>{{score_for}} has captured {{', '.join( completed)}} so far.</p>
+    {% else %}
+    <p>{{score_for}} has no flags yet.</p>
+    {% endif %}
+
+    <br>
+    <a href="/">Take me back.</a>
+</div>
+{% endblock %}

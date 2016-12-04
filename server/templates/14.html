@@ -1,14 +1,8 @@
-<style>
- pre {
-     background: lavender;
-     display: inline-block;
-     padding: 3px;
-     margin: 4px 0;
- }
-</style>
-<strong>14</strong><br><br>
+{% extends "hint.html" %}
+{% block hint %}
+<h2>14</h2>
 
-Have fun!<br>
+<p>Have fun!</p>
 
 <pre>
 char turing[]="\033\027\002\032\000\131\015\024\014\015\036\016\022\021\012\107\006";
@@ -16,3 +10,4 @@ char semaphore='}';char trie='{';char link_state='c';int main(int argc,char **ar
 int i;for(i=0;i&lt;sizeof(turing)-1;i++){if(i%3==0){putchar(turing[i]^semaphore);}else
 if(i%3==1){putchar(turing[i]^trie);}else{putchar(turing[i]^link_state);}}putchar('\n');}
 </pre>
+{% endblock %}
