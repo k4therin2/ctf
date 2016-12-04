@@ -17,6 +17,7 @@ app = Flask(__name__)
 cas = CAS(app, '/cas')
 app.config['CAS_SERVER'] = 'https://login.case.edu'
 app.config['CAS_AFTER_LOGIN'] = 'index'
+app.config['SERVER_NAME'] = 'ctf.brennan.io:80'
 EMAIL_ENABLED = True
 
 # little hack to this working on Flask development server
