@@ -28,6 +28,7 @@ EMAIL_ENABLED = True
 flag_map = {
     'flag{I_lied_this_is_a_flag}': 1,
     'flag{spoofer_no_spoofing}': 2,
+    'flag{All men are created equal}': 3,
     'flag{touch_and_go}': 4,
     'flag{never_break_the_chain}': 6,
     'flag{gary-ignatius-teabody}': 12,
