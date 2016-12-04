@@ -9,6 +9,7 @@ import shelve
 from flask import Flask, render_template, g
 from flask_cas import CAS, login_required
 
+from emailhint import send_hint
 from linkedlist import LINKED_LIST, LL_END
 
 
@@ -17,6 +18,7 @@ cas = CAS(app, '/cas')
 app.config['CAS_SERVER'] = 'https://login.case.edu'
 app.config['CAS_AFTER_LOGIN'] = 'index'
 app.config['CAS_AFTER_LOGOUT'] = 'index'
+EMAIL_ENABLED = True
 
 # little hack to this working on Flask development server
 scores_dict = None
@@ -28,6 +30,7 @@ scores_dict = scores_dict or shelve.open('scores')
 # flag format lol?
 flag_map = {
     'flag{I_lied_this_is_a_flag}': 1,
+    'flag{spoofer_no_spoofing}': 2,
     'flag{touch_and_go}': 4,
     'flag{never_break_the_chain}': 6,
     'flag{gary-ignatius-teabody}': 12,
@@ -106,6 +109,22 @@ def linkedlist(addr):
         return 'next: %d\nbut the real one is: %d' % tuple(next_addrs)
     else:
         return 'next: %d' % next_addrs[0]
+
+
+@app.route('/emailme')
+@login_required
+def emailme():
+    # I'm sure this could be flaky, so I'm providing a mechanism to disable it,
+    # and the email script is outside so that an organizer can manually send
+    # the email.
+    if not EMAIL_ENABLED:
+        return render_template('email.html', success=False)
+    try:
+        send_hint(cas.username + '@case.edu')
+    except:
+        print('ERROR SENDING EMAIL')
+        return render_template('email.html', success=False)
+    return render_template('email.html', success=True, msg='Check your email!')
 
 
 @app.errorhandler(404)
