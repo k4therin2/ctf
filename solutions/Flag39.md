@@ -40,7 +40,7 @@ Now getting each normalized word is as easy as ```words = letter.split(' ')```.
 
 We want to map the first half of the alphabet to 0 and the second half to 1. This can be done in one line with a sweet one line dictionary comprehension:
 ```python
-char_map = {c: 1 if ord(c) < ord(n) else 0 for c in string.ascii_lowercase}
+char_map = {c: 1 if ord(c) < ord('n') else 0 for c in string.ascii_lowercase}
 ```
 Then we can map each word in ```words``` to a list of bits:
 ```python
