@@ -60,8 +60,8 @@ obfuscate it a bit more, it uses a bunch of if statements and modular arithmetic
 to achieve the same result that you would get from a simpler implementation:
 
 ```c
-char *ciphertext[] = "...";
-char *key [] = "}{c";
+char ciphertext[] = "...";
+char key[] = "}{c";
 int keylen = sizeof(key) - 1;
 for (int i = 0; i < sizeof(ciphertext) - 1; i++) {
   // XOR!
