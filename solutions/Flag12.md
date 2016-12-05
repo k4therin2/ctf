@@ -31,8 +31,11 @@ We can apply these two facts to attack the algorithm. We know that ```byte[i] ^ 
 
 and then simplify using the inverse and commutative properties:
 
-```x[i+1] = x[i] ^ byte[i] ^ x[i] = x[i] ^ x[i] ^ byte[i] = byte[i]```
-```x[i+1] = byte[i]```
+```
+x[i+1] = x[i] ^ byte[i] ^ x[i]
+x[i+1] = x[i] ^ x[i] ^ byte[i]
+x[i+1] = byte[i]
+```
 
 So even though the hash process seems complex and unpredictable for an unknown input, it turns out we had the key the whole time! Now we can write an un-hashing function by using ```x = 42``` for the first byte and the previous byte for all the others:
 
