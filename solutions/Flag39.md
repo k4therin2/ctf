@@ -3,8 +3,10 @@ Flag 39
 The hint:
 
 > Your friend, a Harvard English professor, is in jail and has written you a strange letter! It seems to be about workout machines, but maybe there is something hidden within the text. 
-Here's what you know: your friend probably wants to communicate something to you. He can't use any complicated cryptography, because he's in jail and they'd totally notice if he was writing down a bunch of figures on a napkin.
-You remember a conversation you were having with him once upon a time, before he went to jail, about a stupid cryptosystem where you split the alphabet in half, assign a 0 for the first half, a 1 for the second half, take the parity of each word, and somehow map that to the alphabet...
+
+> Here's what you know: your friend probably wants to communicate something to you. He can't use any complicated cryptography, because he's in jail and they'd totally notice if he was writing down a bunch of figures on a napkin.
+
+> You remember a conversation you were having with him once upon a time, before he went to jail, about a stupid cryptosystem where you split the alphabet in half, assign a 0 for the first half, a 1 for the second half, take the parity of each word, and somehow map that to the alphabet...
 >> Hi good dear,
 I have some exciting info about the jail. They recently added a great workout device within their good fitness area. Very fun fitness devices will allow their very varied crew in here to hit nice fitness goals.
 If I have your goals? No, you shouldn't have goals of less abs. That be scarcely make any sense.
