@@ -8,9 +8,12 @@ The hint:
 
 > You remember a conversation you were having with him once upon a time, before he went to jail, about a stupid cryptosystem where you split the alphabet in half, assign a 0 for the first half, a 1 for the second half, take the parity of each word, and somehow map that to the alphabet...
 >> Hi good dear,
-I have some exciting info about the jail. They recently added a great workout device within their good fitness area. Very fun fitness devices will allow their very varied crew in here to hit nice fitness goals.
-If I have your goals? No, you shouldn't have goals of less abs. That be scarcely make any sense.
-Bye!
+
+>>I have some exciting info about the jail. They recently added a great workout device within their good fitness area. Very fun fitness devices will allow their very varied crew in here to hit nice fitness goals.
+
+>>If I have your goals? No, you shouldn't have goals of less abs. That be scarcely make any sense.
+
+>>Bye!
 
 To break up the problem, we can infer from our "once upon a time conversation" that we have to do the following things:
 
